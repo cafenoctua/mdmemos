@@ -1,0 +1,196 @@
+# 設計
+- 1コンテナ = 1プロセス
+  - 出来ない場合は1コンテナにつき1つの関心事
+- 永続的なデータはマネージドサービスに任せる
+  - マネージドサービス
+    - サーバー運用管理、保守や障害時の対応など、システム管理を一括して請け負う、アウトソーシングサービス
+    - Dockerはステートを持たないよう設計しましょう。
+# セキュリティ
+- rootユーザを使わない
+- ベースイメージは公式のものをしようするようにしましょう。
+  - 悪意のあるイメージファイルがあるため
+- ビルド時に機微情報を与えない
+  - パスワード等は環境変数やVaultに格納
+    - Vault
+      - 機密情報を管理するためのツールであり、クライアント/サーバ形式で動きます。
+- ホストのファイルのマウントを最小限の権限とパスで範囲を狭くするようにします
+- .dockerignore ファイルを使う
+  - Dockerビルド時に無視するパスを記述するファイル
+# イメージの仕組み
+- 捜査は1レイヤーごとに見ていくため、レイヤーが多くなればなるほどオーバーヘッドが大きくなっていきます。
+- レイヤー
+  - RUN , COPY , ADD の実行時に増やし、UnisonFileSystemへの影響があります。
+  - レイヤーが探索対象のため増やすと遅くなる
+- 中間イメージ
+  - Dockerfile上でコマンド( EXPOSE , ENV , COPY , etc)を実行するたびに中間イメージが作成されます。
+  - 探索対象でないためレイヤーは増えず遅くならない
+# ベストプラクティス
+- 1コンテナでは1プロセスを動かす 設計
+- 軽量なイメージを作る
+  - Docker Image はレイヤーが少なくサイズが軽いものが良いものだとされています。
+  - 最小限の構成にする
+  - 軽量なベースイメージを使用する
+    - Alpine OS がベースとなっているDocker Image を使いましょう。
+      - Alpine OS は軽量なOS
+  - .dockerignoreを使う
+    - Dockerのビルド時に無視するファイル/ディレクトリを指定することができます。
+    - ".git" のようなコンテナ内に不要な情報、 "node_modules" のような上書きされると困るものを記述します。
+- Build
+  - キャッシュを意識する
+    - 変化が起こったレイヤーの直前のキャッシュからビルドを実行します
+    - コード等頻繁に変更されるファイルとパッケージインストール等のあまり変更されないファイルは分けてbuildする
+      - 変更されるとそこでキャッシュが効かなくなるため全コマンドを一から実行することになる
+  - Multi-Stage Build
+    - ビルド用のレイヤーと実行用レイヤーを分けてビルドすることでビルドで成果物が吐き出されるタイプの言語に対応できる
+# ネットワーク
+
+# CMD
+- docker images
+  - 入れたdocker imageを確認
+- docker history <イメージID>
+  - コンテナ・イメージが誰によって作られたかを確認する
+  - イメージの追加を追える
+- docker run <image name> <linux cmd>
+  - 指定したdocker imageでLinuxコマンドを実行
+  -  -i -t <image name> bash
+     - 指定したimageのbashを起動
+       - exitで終了 or ctr + p + q
+   - -c: レスポンス回数を設定
+   - --network
+     - 使用するネットワークを指定
+   - e
+     - 環境変数の指定
+- docker ps
+  - 起動中のimageを確認
+  - -a: 全image確認
+- export CONTAINER=<自分の操作しているコンテナID>
+  - コンテナIDを環境変数に登録
+- export IMAGEID=<自分の操作しているイメージID>
+  - イメージIDを環境変数に登録
+- docker logs <コンテナID>
+  - 指定したコンテナIDが実行中だった場合そのログを確認できる
+- docker stop <コンテナID>
+  - コンテナIDの実行を停止
+- docker kill <コンテナID>
+  - コンテナIDの実行を停止
+- docker inspect $CONTAINER
+  - コンテナの詳細情報を確認
+  - --format: 情報をフィルタできる
+- docker rm
+  - コンテナ削除
+  - $(docker ps -aq --filter='status=exited'): statusがexitedの全コンテナ削除
+  - docker images -aq | xargs docker rmi
+    - イメージ全削除
+- docker diff <コンテナID>
+  - 変更差分を確認
+- docker commit <コンテナID> <レポジトリ名:タグ>
+  - 内容を確定
+  - リポジトリ名を設定したimageとして保存
+- docker build -options tagname
+  - dockerファイルのビルドを行う
+  - -p:ホスト側とコンテナ内のポート・マッピングを行う;ホスト側のポート:コンテナ内のポートの形式で任意の指定ができます。
+  - -t:ビルド成功後、作成されたメッセージにリポジトリ名（とオプションタグ）を付与する
+  - -d: デタッチド・モードで起動する（バックグラウンド）
+  - -v:ホスト側とコンテナ内でボリュームを共有する機能
+- docker search <検索内容>
+  - dockerhubから検索する
+- docker login
+  - dockerhunにログインをする
+- docker push <imagename>
+  - 自作imageをdockerhubにアップロードをする
+- docker rm <CONTAINER ID>
+  - コンテナの削除
+- docker image prune -a
+  - 全イメージ削除
+- docker network ls
+  - デフォルトで存在するネットワークの確認
+- docker network create myapp
+  - 新しいネットワークの作成
+- docker ps -aq | xargs docker rm
+  - コンテナ全削除
+- docker exec -it {Container Name} /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"
+  - exec -it {Container Name} /bin/sh: 指定コンテナをバッシュで立ち上げる
+  -  -c "[ -e /bin/bash ] && /bin/bash || /bin/sh": bashのpwdパスの表示やその他機能の有効化
+# Dockerfile
+- FROM
+  - Docker イメージ構築時に元となるイメージ名やタグを指定します。
+- RUN
+  - コンテナの中で実行するコマンドを記述します。ただし、このコマンドを使ってデーモンを起動することはできません。
+- CMD
+  - Docker起動時にデフォルトで実行されるコマンドを定義します。
+- apt-get installを使うときの注意点
+  - apt-get -y updateを先に実行してapt-get installを使えるようにしておく
+- ENV
+  - Docker内で使用する環境変数を定義します。
+- WORKDIR
+  - Dockerfileでコマンドを実行する際に基準となるディレクトリを設定します。
+- USER
+  - 作成したDocker Image を起動時にログインするユーザーを指定します。
+  - デフォルトは root が設定されているため、セキュリティリスクを回避するために別のユーザーを指定するのが良いでしょう
+- COPY
+  - Docker内へホストのファイル/ディレクトリをコピーします。
+  - 2つの引数を設定します。1つ目はホスト側のディレクトリ、2つ目はDocker側のディレクトリです。
+- EXPOSE
+  - コンテナ起動時に公開することを想定されているポートを記述します。
+- VOLUME
+  - Data Volumeを作成するためのコマンドです。
+  - 永続的なデータや共有するためのデータ、更新頻度の激しいファイルを扱うために使用されます
+- ARGS
+  - Dockerfileのビルド時に変数を使用するためのコマンドです。
+  - ビルドの前提条件/必要情報が増えると複雑化につながるため、基本的に使用しない方が良いです。
+- ADD
+  - ローカルの静的ファイルをコンテナ内に送る
+  - URL や圧縮ファイルも指定できる
+  - COPYを基本的には採用を推奨
+    - 非常に高機能な反面、Dockerfileが複雑度が増します。
+    - URLからファイルを取得するのはパブリックへ依存が発生
+- ENTRYPOINT
+  - CMDと同じ挙動
+  - 予めパラメータを決めておくことができます。
+  - --entrypoint:コンテナ起動時にENTRYPOINTで指定したパラメータを変更可能
+  - CMD採用を推奨
+    - Docker起動時のコマンドを強制します。
+    - 一般的なWebアプリケーションの場合は CMD を使用する方がユーザーにとって使いやすいDocker Image になります。
+# DockerHub
+- Docker Image の命名規則
+  - <USER NAME>/<IMAGE NAME>:<TAG>
+# Docker-Compose
+- ymlファイル
+  - version
+    - バージョン指定
+  - services
+    - 起動するコンテナの定義を行います。
+  - build
+    - docker buildの実行情報を記述します。
+  - volumes
+    - ボリュームのマウントを行います。
+  - ports
+    - ポートの開放を行います。
+  - environment
+    - 起動するコンテナへ環境変数を定義します。
+  - env_file
+    - ファイルに定義された環境変数を読み取り、コンテナへ定義します。
+  - command
+    - Dockerfileで定義されている CMD の上書きを行います。
+  - container_name
+    - コンテナ名定義(同一名がある場合はバッティング)
+  - context
+    - Dockerfileの相対パスを指定
+  - image
+    - タグや image ID の一部です。ローカルでもリモートでも構いません。ローカルに存在しなければ、Compose はイメージを取得（pull）します。
+  - tty
+    - True:コンテナが起動し続けます。
+- CMD
+  - build
+    - docker-compose.ymlをビルド
+  - up
+    - Dockerfileで定義されている CMD の上書きを行います。
+    - -d:デタッチドモードで起動
+  - down
+    - カレントディレクトリの docker-compose.yaml に紐付いているContainerとNetworkを削除
+  -  --rmi all
+     - イメージも削除する
+  -  rm
+     - Volumeを削除
+# Automated Build
+- githubでpushした時に自動ビルドする

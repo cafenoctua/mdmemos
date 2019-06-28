@@ -1,0 +1,208 @@
+# tensorflow.keras
+- .datasets
+  - kerasで提供されているデータセットの読み込み
+  - mnist
+    - mnistデータ・セットの読み込み
+- .untils
+  - to_categorical
+    - onehot表現を作成する
+- .models
+  - Sequential
+    - layer（層）をどこに配置するか、また各layerのユニット数はいくつかを指定
+    - Sequential.add関数でlayer(層)の追加を行う
+    - Sequential.compile関数でモデルの学習処理について指定
+      - optimizer（最適化手法）
+      - loss（損失関数）
+      - metrics（評価関数（任意））
+      - .compile
+        - 訓練過程の設定．
+        - loss
+          - 損失関数
+        - optimizer
+          - 最適化手法
+        - metrics
+          - 評価関数
+      - .fit(xdata,ydata,batch_size=,epochs=,verbose=,validation_data=(xtest,ytest))
+        - x：評価に使用する入力データ
+        - y：評価に使用する出力データ
+        - batch_size：1回の評価を行うにあたって用いるサンプル数
+        - verbose：評価のログを出力するか（0:しない、1：する(デフォルト)
+        - callbacks=keras.callbacks.EarlyStopping(patience=0, verbose=1)
+      - .predict(input_test,batch_size=)
+  - save
+    - 学習済みモデルをhdf5形式で保存する
+  - load_model
+    - 学習済みモデルの読み出し
+      
+- .layers
+  - Dense
+    - 通常の全結合ニューラルネットワークレイヤー．
+    - units: 出力ユニット数( 𝑁 )
+    - activation: 出力ユニットに適用する活性化関数、Activationレイヤーの説明を参照
+    - use_bias: バイアス 𝑏 を使用するか
+    - kernel_initializer: 重み行列 𝑊 の初期化方法（initializerについては3章で扱います）
+    - bias_initializer: バイアス 𝑏 の初期化方法（initializerについては3章で扱います）
+
+  - Activation
+    - 活性化関数
+    - relu,softmaxを指定可能
+    - sigmoid:  𝑓(𝑥)=11+𝑒−𝑥 
+    - ReLU:  𝑓(𝑥)=max(0,𝑥) 
+    - tanh:  𝑓(𝑥)=tanh(𝑥)=𝑒𝑥−𝑒−𝑥𝑒𝑥+𝑒−𝑥 
+    - softmax:  𝑓(𝑥)=exp(𝑥𝑑)∑𝑑′exp(𝑥𝑑′)(𝑥∈ℝ𝐷, 𝑑=1,2,…,𝐷)
+    - .core
+      - .Flatten()
+        - 入力をフラット化します。つまり、リストの入れ子になっているデータを1つのリストに展開します
+      - .Reshape()
+        - 変換先のshapeを表す整数のタプル、ただしサンプルの次元（バッチサイズ）を含まない
+      - .Permute
+        - 入力の次元を入れ替えます
+          - 行列を転置する等
+      - .RepeatVector
+        - 入力を指定回数繰り返します。
+      - .Dropout
+        - ドロップアウトを使用
+  - .Conv2D
+    - 畳み込み層の設定
+    - filters: フィルター (カーネル) の数
+    - kernel_size: フィルターの大きさ
+    - strides: フィルターを動かす幅
+    - padding: パディング
+    - activation: 活性化関数
+    - use_bias: バイアス項の有無
+  - Pooling
+    - .MaxPooling2D
+    - .AveragePooling2D
+    - .GlobalMaxPooling2D
+    - .GlobalAveragePooling2D 
+    - pool_size: プーリングする領域のサイズ
+    - strides: ウィンドウを動かす幅
+    - padding: パディング
+  - .normalization
+    - BatchNormalization
+      - バッチ正規化を適用
+  - .SimpleRNN
+    - units：出力次元（上図 𝑜𝑡 の次元）
+    - activation：活性化関数s
+    - use_bias：バイアスベクトル（ 𝑈𝑥𝑡+𝑊𝑠𝑡−1 に付け加えるベクトル）を使用するか
+    - {kernel,recurrent,bias}_initializer：各パラメータの初期化法（kernelは上図 𝑈 , recurrentは上図 𝑊 を指す）
+    - {kernel,recurrent,bias,activity}_regularizer：各パラメータの正則化（activityは出力=activationを指す）
+    - {kernel,recurrent,bias}_constraint：各パラメータに課す制約
+    - dropout：入力についてのdropoutの比率
+    - recurrent_dropout：再帰についてのdropoutの比率（上図横矢印に対して適用するdropout）
+    - return_sequences: Falseなら出力としては系列の最後の出力のみ（ 𝑜𝑇 のみ）を返す、Trueなら出力として完全な系列（ 𝑜1,𝑜2,…,𝑜𝑇 ）を返す
+    - return_state: Trueのときは出力とともに，最後の状態（ 𝑠𝑇 ）を返す
+    - go_backwards: Trueのときは入力系列を後ろから処理する（出力も逆順に）
+    - stateful: Trueのときは、前バッチの各サンプルに対する最後の状態を、次のバッチのサンプルに対する初期状態として引き継ぐ
+    - unroll: （高速化のためのオプション）Trueのときは再帰が展開され高速化されるが、よりメモリに負荷がかかる（短い系列にのみ適する）
+  - .LSTM
+    - units：ユニット数（系列長 𝑇 ）
+    - activation：活性化関数
+    - recurrent_activation：ゲート係数の計算で使用する活性化関数
+    - use_bias：バイアスベクトル（ 𝑊𝑥𝑡+𝑅ℎ𝑡−1 に付け加えるベクトル）を使用するか
+    - {kernel,recurrent,bias}_initializer：各パラメータの初期化法（kernelは 𝑊 , recurrentは 𝑅 を指す）
+    - unit_forget_bias：忘却ゲートを1に初期化
+    - {kernel,recurrent,bias,activity}_regularizer：各パラメータの正則化（activityは出力=activationを指す）
+    - {kernel,recurrent,bias}_constraint：各パラメータに課す制約
+    - dropout：入力についてのdropoutの比率（ 𝑊 に対するdropout）
+    - recurrent_dropout：再帰についてのdropoutの比率（ 𝑅 に対するdropout）
+    - return_sequences: Falseなら出力としては系列の最後の出力のみ（ 𝑜𝑇 のみ）を返す、Trueなら出力として完全な系列（ 𝑜1,𝑜2,…,𝑜𝑇 ）を返す
+    - return_state: Trueのときは出力とともに，最後の状態（ 𝑠𝑇 ）を返す
+    - go_backwards: Trueのときは入力系列を後ろから処理する（出力も逆順に）
+    - stateful: Trueのときは、前バッチの各サンプルに対する最後の状態を、次のバッチのサンプルに対する初期状態として引き継ぐ
+    - unroll: （高速化のためのオプション）Trueのときは再帰が展開され高速化されるが、よりメモリに負荷がかかる（短い系列にのみ適する）
+  - .GRU
+    - units：ユニット数（系列長 𝑇 ）
+    - activation：活性化関数
+    - recurrent_activation：内部で使用する活性化関数
+    - use_bias：バイアスベクトル（ 𝑈𝑥𝑡+𝑊ℎ𝑡−1 に付け加えるベクトル）を使用するか
+    - {kernel,recurrent,bias}_initializer：各パラメータの初期化法（kernelは上図 𝑈 , recurrentは上図 𝑊 を指す）
+    - {kernel,recurrent,bias,activity}_regularizer：各パラメータの正則化（activityは出力=activationを指す）
+    - {kernel,recurrent,bias}_constraint：各パラメータに課す制約
+    - dropout：入力についてのdropoutの比率
+    - recurrent_dropout：再帰についてのdropoutの比率（上図横矢印に対して適用するdropout）
+    - return_sequences: Falseなら出力としては系列の最後の出力のみ（ 𝑜𝑇 のみ）を返す、Trueなら出力として完全な系列（ 𝑜1,𝑜2,…,𝑜𝑇 ）を返す
+    - return_state: Trueのときは出力とともに，最後の状態（ ℎ𝑇 ）を返す
+    - go_backwards: Trueのときは入力系列を後ろから処理する（出力も逆順に）
+    - stateful: Trueのときは、前バッチの各サンプルに対する最後の状態を、次のバッチのサンプルに対する初期状態として引き継ぐ
+    - unroll: （高速化のためのオプション）Trueのときは再帰が展開され高速化されるが、よりメモリに負荷がかかる（短い系列にのみ適する）
+  - .embeddings
+    - .Embedding
+      - 埋め込みを実装
+      - input_dim: 単語数（＝入力データの最大インデックス + 1）
+      - output_dim: 出力次元（何次元に圧縮するか）
+      - embeddings_{initializer, regularizer, constraint}: embeddings行列のInitializers, Regularizers, Constraints
+      - mask_zero: 入力系列中の0をパディング（系列の長さを統一するために追加される無意味な要素）と解釈し、無視するか
+      - input_length: 入力の系列長
+  - Input
+    - kerasテンソルのインスタンス化
+  - UpSampling2D 
+    - 2次元の入力に対するアップサンプリングレイヤー
+    - データの増加を行う
+    - size: 整数か2つの整数のタプル．行と列のupsampling係数．
+    - data_format: データの出力テンソルの選択
+- .optimizers
+  - 全optimizersで適用可
+    - clipnorm
+      - 勾配の2乗ノルムの最大値を制限する
+    - clipvalue
+      - 勾配の"要素"の絶対値の大きさを制限する
+  - .SGD
+    - 確率的勾配降下法を最適化手法
+    
+  - .Adagrad
+    - 全体の学習率を各方向ごとに過去の勾配の累積で割り引くことで、勾配が大きかった方向の学習率を下げ、小さかった方向の学習率を上げる工夫を導入しています。
+    - デメリット
+      - 勾配の蓄積が大きくなり、更新量が小さくなると二度と大きくなることがない
+  - .RMSprop
+    - 勾配の情報が指数的な減衰によって次第に忘却されるように更新式を変更したことが特徴的になっています。
+    - 勾配の指数移動平均を制御するパラメータとしてrhoが新たに指定できる点が特徴的です。
+    - 通常はrho=0.9程度
+  - .AdaDelta
+    - 次元の不一致を加味して自動的に適切な学習率が設定されるようにしています。
+    - 勾配の2乗の指数移動平均に加えて、更新量の2乗の指数移動平均をもちい、両者の比を学習率として設定しています。
+    - 更新量と勾配の指数移動平均を制御するパラメータrhoを設定できます。
+    - 通常rho=0.95
+    - lrはデフォルトのままとすることを推奨(提案論文より)
+  - .Adam
+    - 各方向への勾配の2乗に加えて勾配自身も、指数移動平均による推定値に置き換えています。
+    - ある種Momentumと似た効果が期待できます。
+    - パラメータとしては、勾配、勾配の2乗それぞれの指数移動平均を制御するパラメータとしてbeta_1,beta_2が新たに指定可能です。
+    - デフォルトのパラメータが推奨
+- .regularizers
+  - .l2
+    - L2正則化を使用
+  - .l1
+    - L1正則化を使用
+  - .l1_l2
+    - ElasticNet
+- .preprocessing
+  - .image
+    - ImageDataGenerator
+      - 画像の操作生成
+      - width_shift_rang:左右操作
+      - height_shift_range:上下操作
+      - horizontal_flip:左右反転
+      - rotation_range:回転
+  - .text
+    - .Tokenizer
+      - 単語の数値化
+      - 引数
+        - num_words：利用する単語の最大数（指定するとデータセット中の頻度上位num_wordsの単語のみ使用）．
+        - filters：句読点などフィルタする文字のリスト
+        - lower：テキストを小文字に強制するか
+        - split：単語を分割するセパレータ
+        - char_level：文字ごとに分割・数値化するか
+      - メソッド
+        - fit_on_texts(texts)：入力＝学習に使う文章のリスト、出力＝なし
+        - texts_to_sequences(texts)：入力＝数値化する文章のリスト、出力＝数値化された文章のリスト
+
+- .applications
+  - 構築済みのモデルを読み込み
+# tensorflow.python.keras
+- .utils
+  - .vis_utils
+    - モジュールは（graphvizを用いて）Kerasモデルの可視化するためのユーティリティ関数を提供します
+    - model_to_dot
+      - レイヤのモデル図を確認できる
+    - 

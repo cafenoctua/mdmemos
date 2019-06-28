@@ -1,0 +1,118 @@
+# [MDN_HTML](https://developer.mozilla.org/ja/docs/Learn/Getting_started_with_the_web/HTML_basics)
+# Basic
+- <><-タグでコンテンツを囲み定義する
+- <h1>
+  - 見出し 1〜6まである昇順で大きさ指定
+- <p>
+  - 段落
+- <img src="">
+  - 画像の表示を行う
+  - srcに画像の相対パスを入力する
+  - srcは属性と呼ばれる
+  - alt:画像説明
+  - width:幅
+  - height:高さ
+- <!---->
+  - コメント
+- <head>
+  - ヘッダー設定を行う
+  - id:ヘッダーのidを指定
+- <meta>
+  - charset:文字コード設定
+  - name:名前
+  - content:説明分
+- <title>
+  - ページのタイトル
+- <link>
+  - rel:属性設定
+  - href:リンク先
+- <hr>
+  - 水平の罫線
+- <br>
+  - 改行
+- <strong>
+  - 強調
+- <blockquote>
+  - 引用
+- <ol>
+  - reversed:で逆順にリスト表示
+  - start:はじめのリストを指定
+  - 順番付きリスト
+- <li>
+  - リストアイテム
+- <ul>
+  - 連番付きリスト
+- <dl>
+  - 項目と説明がセットのリスト
+  - <dt>
+    - 項目
+  - <dd>
+    - 説明
+- <a>
+  - リンクの貼り付け
+  - href:リンク先
+  - target:"_blank"で別タブで開く
+- <table>
+  - 表
+  - <thead>
+    - テーブルヘッダー
+  - <tbody>
+    - テーブルのボディ
+  - <th>
+    - デーブルヘッダーの列
+  - <tr>
+    - 行
+  - テーブルボディの列
+- <form>
+  - 入力フォームの定義
+- <label>
+  - formのラベルをつける
+  - for:入力部で定義したidを紐付けられる
+- <input>
+  - 入力部
+  - type:
+    - text:1行のみ入力
+    - submit:決定ボタンを設定
+    - password:パスワード入力用のフォームを設定
+    - checkbox:チェックボックスの設定
+      - checked:初期選択を設定
+    - radio:ラジオボタンを設定
+      - name:同ラジオボタンに同じnameを指定して一つのみ指定可能
+  - id:idをつけられる
+  - value
+    - 初期値設定
+  - placeholder
+    - 入力ガイドを設定
+    - 
+- <textarea>
+  - 長文の入力が可能
+  - id:idをつけられる
+  - placeholder
+    - 入力ガイドを設定
+- <button>
+  - ボタンを定義
+  - 画像タグ等つけられる
+- <select>
+  - プルダウンメニューの定義
+  - size:セレクトボックスの表示行数を指定
+  - multiple:アイテムを複数選択可能な設定
+  - <option>
+    - アイテムを定義
+    - selected:初期のアイテムを定義
+- <fieldset>
+  - タグのグループ化
+- コンテンツセクショニング
+  - <header>
+    - 導入的コンテンツ
+  - <footer>
+    - 著作者情報連作先
+  - <nav>
+    - 主要ナビゲーション
+  - <article>
+    - 配信再利用を意図した独立コンテンツ
+  - <aside>
+    - 本文と関連薄いコンテンツ
+  - <section>
+    - その他
+- 実態参照
+  - 特殊な記号を表示
