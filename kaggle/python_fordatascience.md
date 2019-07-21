@@ -52,10 +52,41 @@
   - _, でitemに返り値をタプルで受け取る
 - .replace
   - 文字列置換
+- print
+  - 出力
+  - 文字列内に{}で変数の値を挿入
+    - {:,.3f}
+      - .3fは3桁の浮動小数点数表示指定
+  - .format(variables)
+- yield
+  - 処理一旦停止して指定した値を返す
+  - 重いデータを小刻みに取得するのに使える
+  - [参照先](http://ailaby.com/yield/)
+- list
+  - .appendで要素追加
+  - 他変数に普通に代入すると変数同士がリンクしてしまう
+    ```
+    ex.
+    t = [1,2,3] 
+    tcopy = t
+    tcopy[0] = 5
+    tcopy
+    > [5,2,3]
+    t
+    > [5,2,3]
+    ```
+  - リンクさせたくない場合は.copyメソッドを指定して代入する
+    ```
+    ex.
+    t = [1,2,3] 
+    tcopy = t.copy()
+    ```
 # io
 - .StringIO
     - これがどう便利かというと、「ファイルオブジェクトのように見えるオブジェクト」を作れます
     - 入力値をファイルオブジェクトとして扱えるためpandasに読みっとってもらうことができる
+- BytesIO
+  - メモリ上でバイナリデータを扱うための機能です。
 # tqdm
 ```
 走らせた処理の進捗状況をプログレスバーとして表示するためのパッケージ
@@ -84,6 +115,9 @@
     - ''-Nanを埋める値
     - inplace-True:置き換え
 - data.plot
+  - (kind="scatter", x="longitude", y="latitude", alpha=0.1)
+    - kind:グラフ種類
+    - alpha: データ密度色付け
     - .pie(explode=[0,0.1],autopct='%1.1f%%',ax=ax[0],shadow=True)
 ax[0].set_title('Survived')
         - データを円グラフで表示
@@ -165,27 +199,84 @@ ax[0].set_title('Survived')
     - 2グループ以上存在する場合はlevels[1〜]から指定
     - 使いどころ
       - aggで計算した値を列毎に分解する場合
+- .skew()
+  - 歪度計算
+- .kurt()
+  - 尖度計算
+- .concat()
+  - データの連ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
 # numpy
+- [次元操作参ータ全部をバッチという表現をしていて、ミニバッチとはバッチのatenadiary.jp/entry/2017/05/17/105549)
 - .zeros
-  - 指定した行列の形で0の行列を作る
-- .concatenate()
-    - 既存の軸に沿って結合-縦に結合
+  - 指定した行ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
+- .concatenateータ全部をバッチという表現をしていて、ミニバッチとはバッチの
+    - 既存の軸ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
 - .argsort
-    - 多次元配列のソート
-    - 末尾[::-1]をつけると降順でソート
-- .linspace(min, max, num = 11)
-    - min-max間をnumの数で均等割りした値を出力
+    - 多次元配ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
+    - 末尾[::-ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
+- .linspace(miータ全部をバッチという表現をしていて、ミニバッチとはバッチの
+    - min-maxータ全部をバッチという表現をしていて、ミニバッチとはバッチの値を出力
 - .exp
-  - 対数を計算
+  - 対数を計算ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
 - .maximum
-  - 入力値の最大値を出力
+  - 入力値の最ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
 - .tanh
-  - tanhを計算
+  - tanhを計算ータ全部をバッチという表現をしていて、ミニバッチとはバッチの
 - .random
   - .randint
     - 整数の乱数を生成
   - .uniform(low,high,size)
     - low以上high未満の一様乱数をsize分生成
+  - .shuffle
+    - 配列を並び替える
+  - .permutation
+    - 並び替えた配列のコピーを生成する
+- expand_dims()
+  - 軸を指定して次元を増やす。
+  - axis = 0:[1 2 3] -> [[1 2 3]]
+  - axis = 1:[1 2 3] -> [[1] [2] [3]]
+  - a1[np.newaxis, :]と同義
+- .r_[a,b]
+  - 行結合
+- .c_[a,b]
+  - 列結合
+- .allclose
+  - 2つのNdarrayが近い値かどうかを比べる
+- fliplr
+  - 配列を左右に反転します。 各行のエントリを左右に反転します。列は保持されますが、以前とは異なる順序で表示されます。
+- clip
+  - 引数に最小値と最大値を指定すると、その範囲外の値は最小値または最大値に置き換えられる。
+- prod
+  - 配列要素の積
+    - ex:
+    ```
+    np.prod(x[2,3])
+    >2*3 = 6
+    ```
+- corrcoef(x, y=None, rowvar=True, bias=_NoValue, ddof = _NoValue)
+  - 相関係数を要素に持つ行列が返されます。
+  - ex:
+    ``` python
+    cor = np.corrcoef(train_transaction['TransactionDT'], train_transaction[i])[0,1]
+    # [0,1]は相関係数のみ取得する
+    ```
+# scipy
+- .stats
+  - 一通り確率密度関数から検定までが実装されています
+  - .probplot(data, plot)
+    - 確率プロットの分位数を計算し、必要に応じてプロットを表示します
+    - plot
+      - 分位数と最小二乗法をプロットします
+  - .norm
+    - - 正規分布を計算
+    - .fit(data)
+- .special
+  - .boxcox(data, lam)
+    - Box-Cox変換を計算する
+    - Box-Cox
+      - データを正規分布に近づけてくれる
+    - lam
+      - 変換のパワーパラメータ
 # matplotlib
 ## .pyplot
 - .subplots(nrows=1, ncols=1, sharex=False, sharey=False, squeeze=True, subplot_kw=None, gridspec_kw=None, **fig_kw)
@@ -200,12 +291,25 @@ ax[0].set_title('Survived')
   - figを定義
 - plt.add_subplot()
   - サブプロットを追加
+- .bar(x,y)
+  - 棒グラフ表示
+- .barh(x,y)
+  - 棒グラフ(横)表示
+- subplots_adjust
+  - 左右の余白は wspace、上下の余白は hspace で指定します。
+- add_subplot(行, 列, 場所)
+  - subplotの追加
 # seaborn
 - .countplot(x=None, y=None, hue=None, data=None, order=None, hue_order=None, orient=None, color=None, palette=None, saturation=0.75, dodge=True, ax=None, **kwargs)
-    - x-X軸データ
-    - hue-カウントするデータ
-    - data-使用データ
-    - ax-プロット位置
+  - カテゴリ値をカウントして棒グラフでプロット
+  - x-X軸データ
+  - hue-カウントするデータ
+  - data-使用データ
+  - ax-プロット位置
+  - ex:
+  ```python
+  sns.countplot(x="ProductCD", ax=ax[0], hue = "isFraud", data=train_transaction)
+  ```
 - .factorplot(x,y,hue='',data=, col=)
     - 複数の離散変数と1つ以下の連続変数の分布を可視化するグラフ
     - col-カテゴリでプロット切り分け
@@ -223,6 +327,10 @@ ax[0].set_title('Survived')
     - ヒストグラムと密度近似関数を表示
     - a-Data
     - kde-密度近似関数
+    - ex:
+    ```python
+    sns.distplot(train_transaction.loc[train_transaction['isFraud'] == 1][cn], bins=50)
+    ```
 - .heatmap(data, vmin=None, vmax=None, cmap=None, center=None, robust=False,
                 annot=None, fmt='.2g', annot_kws=None, linewidths=0,
                 linecolor='white', cbar=True, cbar_kws=None, cbar_ax=None,
@@ -231,7 +339,10 @@ ax[0].set_title('Survived')
     - 色付き表のプロット
     - data-data.corr()
     - vmin, vmax
+      - 最小値、最大値
     - cmap-カラーマップ指定
+    - squre
+      - True:グラフを正方形に保つ
 - .pairplot(data, hue='Survived', palette = 'seismic',size=1.2,diag_kind = 'kde',diag_kws=dict(shade=True),plot_kws=dict(s=10) )
     -  hue-プロットしたいデータ
 - .PairGrid(data = plot_data, size = 3, diag_sharey=False,hue = 'TARGET',vars = [x for x in list(plot_data.columns) if x != 'TARGET'])
@@ -246,11 +357,64 @@ ax[0].set_title('Survived')
     ```
     母集団の標本のデータが与えられたとき、カーネル密度推定を使えばその母集団のデータを外挿できる
     ```
+- .boxplot(x,y,data)
+  - 箱ひげ図
+- set
+  - デフォルトスタイルのセット
+  - ex:
+  ```python
+  sns.set(font_scale=1.2)
+  ```
+
 # plotly
 - offline
     - .iplot()
         - グラフの表示
-
+- graph_objs
+  - Figure(data, layout)
+    - プロットの表示
+    - data: プロットしたいデータタイプとそこに含むデータが定義されたグラフオブジェクト
+    - layout: 辞書型で定義した情報を入力
+    - ex:
+    ```python
+    trace2 = go.Bar(
+     x=x ,
+     y=y,
+     marker=dict(
+         color=y,
+         colorscale = 'Viridis',
+         reversescale = True
+     ),
+     name="Imbalance",    
+    )
+    layout = dict(
+        title="Data imbalance - isFraud",
+        #width = 900, height = 500,
+        xaxis=go.layout.XAxis(
+        automargin=True),
+        yaxis=dict(
+            showgrid=False,
+            showline=False,
+            showticklabels=True,
+    #         domain=[0, 0.85],
+        ), 
+    )
+    fig1 = go.Figure(data=[trace2], layout=layout)
+    ```
+  - [Bar](https://plot.ly/python/reference/#bar)
+    - ex:
+    ```python
+    trace2 = go.Bar(
+        x=x ,
+        y=y,
+        marker=dict(
+            color=y,
+            colorscale = 'Viridis',
+            reversescale = True
+        ),
+        name="Imbalance",    
+    )
+    ```
 # gc
 - .enable()
     - 自動ガベージコレクションを有効にします。
@@ -260,3 +424,22 @@ ax[0].set_title('Survived')
 - .display
   - SVG
     - オブジェクトのSVG表現を表示します。
+# PIL
+- Image
+  - .open(img_dir)
+    - イメージファイル読み込み
+    - useex:
+      - np.array(Image.open(img_dir))
+        - 画像をnumpy配列で読み込み
+  - resize(size)
+    - 画像のサイズを変更
+  - fromarray(np.ndarray)
+    - ndarray型で読み込んだ画像データを画像データに再変換
+  - save(image_name)
+    - 画像の保存
+# functools
+- partial
+  - 簡易的なラッパ関数を作成できる
+  - 初期値が冗長な関数をラップするのに使える
+# glob
+- カレントディレクトリのファイル一覧を取得する

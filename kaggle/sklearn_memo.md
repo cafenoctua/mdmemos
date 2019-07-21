@@ -1,3 +1,6 @@
+# 設計思想
+- 全推定器/変換器/予測器はfitで計算される
+- メソッドの最後に[_]をつけることで使用しているパラメータがわかる
 # Basic Tecnique
 - リストに分類器をまとめることで複数の分類器を繰り返しで計算可能
 
@@ -6,6 +9,10 @@
 - .preprocessing
   - MinMaxScaler
     - 正規化
+    - .fit_transform
+      - 正規化を行う
+    - inverse_transform
+      - 正規化を元に戻す
   - .LabelEncoder
       - クラスラベルを整数に変換
       - .fit_transform(classlables)
@@ -15,6 +22,10 @@
   - Imputer(strategy="")
     - 欠損値の埋め方等を指定して補完する
     - strategy:mean, median, mode
+  - OneHotEncoder
+    - onehotエンコーダ
+  - RobustScaler
+    - 外れ値に対してロバストな統計を使用してフィーチャをスケーリングします。
 ## Classification
 ### XG Boost
 - XGBClassifier
@@ -29,13 +40,22 @@
 - .svm
     - サポートベクターマシン
     - .SVC(kernel='rbf',C=1,gamma=0.1)
-        - kernel-rbf:カーネル使用;linear:線形
-        - C-正則化
-        - gamma-カーネルのパラメータ
+      - 分類
+      - kernel-rbf:カーネル使用;linear:線形
+      - C-正則化
+      - gamma-カーネルのパラメータ
+    - .SVR(kernel='rbf',C=1,gamma=0.1)
+      - 回帰を計算
+      - kernel-rbf:カーネル使用;linear:線形
+      - C-正則化
+      - gamma-カーネルのパラメータ
+    
 - .linear_model
     - LogisticRegression
         - ロジスティック回帰
         - penalty-正則化
+    - Lasso
+      - ラッソ回帰を使用
 - .ensemble
     - RandomForestClassifier
         - ランダムフォレスト
@@ -73,7 +93,15 @@
 - .tree
     - DecisionTreeClassifier
         - 決定木
-
+- .pipeline
+  - .Pipeline
+    - 変換器,推定器,予測器をまとめて定義してい実行できる
+  - .FeatureUnion
+    - Pipelineをまとめて実行できる
+- .base(推定量)
+  - clone
+    - 同じパラメータで新しい推定量を構築します。
+    - 
 # Calc Technique
 - .model_selection
     - KFold
@@ -100,6 +128,10 @@
         - 混同行列計算
         - Y:正解ラベル
         - y_pred:予測ラベル
+    - .precision_score
+      - 適合率の計算
+    - .recall_score
+      - 再現率の計算
     - .f1_score(Y,y_pred)
         - F1スコア計算
         - Y:正解ラベル
@@ -114,3 +146,10 @@
         - fpr:偽陽性
         - tpr:真陽性
     
+# ModelSave
+- .externals
+  - joblib
+    - .dump
+      - モデルをダンプする
+    - .load
+      - ダンプしたモデルをロードする

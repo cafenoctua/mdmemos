@@ -1,0 +1,22 @@
+- arange[::-1]
+  - 逆にソートする
+- np.nonzero(arange)
+  - 0でない要素を取得する
+- np.pad(data, pad_width=1, mode='constant', constant_values=0)
+  - 配列をパディングする
+  - args
+    - pad_width: パディング幅
+    - mode: constant->定数を使用, edge->端の値を使用
+    - constant_values: modeがconstantの時に使う定数
+- np.diag(arange, k)
+  - 対角行列を生成する
+  - args
+    - k: 正の数を入れると左と下に0を挿入、負の数を入れると右と上に0を挿入
+- unravel_index(要素の位置 or 要素, (配列))
+  - 指定した要素もしくは要素位置から配列の座標を取得する
+- tile(array, (行, 列))
+  - 指定したarrayを指定した行列の形にタイル状に並べる
+- np.dot
+  - 行列の内積を計算
+  - array @ arrayでも内積を計算できる
+  - 

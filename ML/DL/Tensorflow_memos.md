@@ -1,3 +1,111 @@
+# tensoflow
+- run
+  - tf.get_default_session（）を呼び出すためのショートカットでOperationクラスを返す
+  - tf.Session()クラスのメソッドでしか返せない
+- eval
+  - tf.get_default_session（）を呼び出すためのショートカットでTensorクラスを返す
+  - tf.get_default_session（）を取得したtfの変数の後ろに定義できるためwith公文に処理を入れられる
+- tf.global_variables_initializer()
+  - 全変数を初期化するノードを実行初期に立ち上げる
+- with as 公文でsessを囲むことでsess.close()まで自動でやってくれる
+- .constant
+  - 定数宣言
+- .Variable
+  - 変数を宣言
+- .matmul
+  - 内積
+- .random_uniform(data, minrange, maxrange, seed)
+  - 乱数生成
+- .square
+  - 自乗
+- .transpose
+  - 転置
+- .reduce_mean(list)
+  - 与えたリストに入っている数値の平均値を求める関数
+- .assign(assign_data, formula)
+  - 変数に新しい値を代入するノードを作る
+- gradients
+  - 自動微分
+- .train
+  - 最適化法
+  - .GradientDescentOptimizer
+    - 勾配降下法で最適化をかける
+  - MomentumOptimizer
+    - 慣性最適化
+    - use_nesterov: NAGを使用する
+  - AdagradOptimizer
+    - AdaGradを使う
+  - RMSPropOptimizer
+    - RMSPropを使う
+  - AdamOptimizer
+    - Adamを使う
+  - exponential_decay
+    - 学習率を指数関数的スケジューリングで行う
+  - .save
+    - モデルの保存を行う
+  - .import_meta_graph
+    - 保存したmetaファイルを読み取り
+- .placeholder
+  - 実行時に出力指示を行ったデータを出力するだけ
+- nn
+  - relu
+    - relu関数を使用する
+  - sparse_softmax_cross_entropy_with_logits
+    - 交差エントロピーを計算
+  - in_top_k
+    - 論理値を集めた1次元テンソルを返す
+  - dropout
+    - ドロップアウトを適用
+    - 収束が遅れやすい
+  - conv2d(data, feature_maps, strides=[--], padding="SAME or VALID")
+    - VALIDは畳み込み層に0パディングを使わない
+  - max_pool
+    - 最大値プーリングを使う
+  - avg_pool
+    - 平均プーリングを使う
+- layer
+  - batch_normalization
+    - バッチ正規化を適用
+  - conv2d(X, filters, kernel_size, strides=[-],padding="SAME or VALID")
+    - 自動的にフィルタを作り無作為に初期化する
+- stop_gradient
+  - これを定義した以前の層を凍結層にする
+- contrib
+  - layers
+    - l1_regularizer
+      - L1正則化を適用
+    - l2_regularizer
+      - L2正則化を適用
+- get_default_graph
+  - 現在のスレッドのデフォルトグラフを返します。
+- conv(論理値, 正, 偽)
+  - 計算グラフにif分を入れる
+- cast
+  - 型変換を行う
+- stack([], axis=)
+  - 行の結合を行う
+  - axis=1: 列の結合を行う
+- random_crop(data, trim_size)
+  - 画像をランダムにトリミングを行う
+- .image
+  - .random_flip_left_right(image, seed)
+    - 画像をランダムに水平方向に反転する
+  - resize_bilinear(img, size)
+    - 角を固定した状態で何かする
+- expand_dims(tensor, 追加位置)
+  - 与えられたTensorに次元を一つ追加する
+- squeeze(data, axis)
+  - axisで指定した次元数を削除
+- InteractiveSession
+  - シェルなどの対話型コンテキストで使用するTensorFlowセッション。
+- GraphDef
+  - グラフの定義
+- ParseFromString
+  - 文字列を解析
+- get_tensor_by_name
+  - 名前を指定してTensorを取得する
+- variance_scaling_initializer
+  - スケールをウェイトテンソルの形に適合させることができる初期化子。
 # tensorflow.keras
 - .datasets
   - kerasで提供されているデータセットの読み込み
@@ -28,7 +136,12 @@
         - batch_size：1回の評価を行うにあたって用いるサンプル数
         - verbose：評価のログを出力するか（0:しない、1：する(デフォルト)
         - callbacks=keras.callbacks.EarlyStopping(patience=0, verbose=1)
-      - .predict(input_test,batch_size=)
+      - .predict(x,batch_size=)
+        - 推定結果を出力
+      - .predict_proba(x)
+        - 推定確率を出力
+  - evaluate(test_data, test_labels, verbose)
+    - テストモードでモデルの損失値と評価指標値を返します。
   - save
     - 学習済みモデルをhdf5形式で保存する
   - load_model
@@ -36,12 +149,29 @@
       
 - .layers
   - Dense
-    - 通常の全結合ニューラルネットワークレイヤー．
-    - units: 出力ユニット数( 𝑁 )
-    - activation: 出力ユニットに適用する活性化関数、Activationレイヤーの説明を参照
-    - use_bias: バイアス 𝑏 を使用するか
-    - kernel_initializer: 重み行列 𝑊 の初期化方法（initializerについては3章で扱います）
-    - bias_initializer: バイアス 𝑏 の初期化方法（initializerについては3章で扱います）
+    - args
+      - 通常の全結合ニューラルネットワークレイヤー．
+      - units: 出力ユニット数( 𝑁 )
+      - activation: 出力ユニットに適用する活性化関数、Activationレイヤーの説明を参照
+      - use_bias: バイアス 𝑏 を使用するか
+      - kernel_initializer: 重み行列 𝑊 の初期化方法（initializerについては3章で扱います）
+      - bias_initializer: バイアス 𝑏 の初期化方法（initializerについては3章で扱います)
+      - initializer
+        - lucun_uniform
+          - LeCunの初期値で一様分布を使う
+        - lucan_normal
+          - LeCunの初期値で正規分布を使う
+        - glorot_uniform
+          - LeCunの初期値で一様分布を使う
+        - glorot_normal
+          - LeCunの初期値で正規分布を使う
+        - he_uniform
+          - Heの初期値で一様分布を使う
+        - he_normal
+          - Heの初期値で正規分布を使う
+    - outputs
+      - (batch_size, ..., units)
+        - unitsで指定した数のニューロンが返される
 
   - Activation
     - 活性化関数
@@ -62,6 +192,9 @@
         - 入力を指定回数繰り返します。
       - .Dropout
         - ドロップアウトを使用
+        - args
+          - rate: 入力を0にする確率、0～1の実数値
+          - seed: 乱数のシード値
   - .Conv2D
     - 畳み込み層の設定
     - filters: フィルター (カーネル) の数
@@ -75,6 +208,7 @@
     - .AveragePooling2D
     - .GlobalMaxPooling2D
     - .GlobalAveragePooling2D 
+    - args
     - pool_size: プーリングする領域のサイズ
     - strides: ウィンドウを動かす幅
     - padding: パディング
@@ -147,34 +281,58 @@
       - 勾配の2乗ノルムの最大値を制限する
     - clipvalue
       - 勾配の"要素"の絶対値の大きさを制限する
-  - .SGD
+  - .SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)
     - 確率的勾配降下法を最適化手法
-    
+    - lr: 学習率、0以上の実数
+    - momentum: モーメンタム、0以上の実数（前回のパラメータ更新量を反映させる比率（3.2.2で説明））
+    - decay: 更新毎の学習率の減衰率、0以上の実数
+    - nesterov: Nesterov momentumを適用するかどうか（Trueならモーメンタム項の計算を1ステップ先読みして評価します（3.2.2で説明））
   - .Adagrad
     - 全体の学習率を各方向ごとに過去の勾配の累積で割り引くことで、勾配が大きかった方向の学習率を下げ、小さかった方向の学習率を上げる工夫を導入しています。
     - デメリット
       - 勾配の蓄積が大きくなり、更新量が小さくなると二度と大きくなることがない
+    - args
+      - lr
+      - epsilon
+      - decay
   - .RMSprop
     - 勾配の情報が指数的な減衰によって次第に忘却されるように更新式を変更したことが特徴的になっています。
     - 勾配の指数移動平均を制御するパラメータとしてrhoが新たに指定できる点が特徴的です。
+    - rhoはどれだけ過去の勾配を重視するかを決める
     - 通常はrho=0.9程度
+    - args
+      - lr
+      - rho
+      - epsilon
+      - decay
   - .AdaDelta
     - 次元の不一致を加味して自動的に適切な学習率が設定されるようにしています。
     - 勾配の2乗の指数移動平均に加えて、更新量の2乗の指数移動平均をもちい、両者の比を学習率として設定しています。
     - 更新量と勾配の指数移動平均を制御するパラメータrhoを設定できます。
     - 通常rho=0.95
     - lrはデフォルトのままとすることを推奨(提案論文より)
+    - args
+      - lr
+      - rho
+      - epsilon
+      - decay
   - .Adam
     - 各方向への勾配の2乗に加えて勾配自身も、指数移動平均による推定値に置き換えています。
     - ある種Momentumと似た効果が期待できます。
     - パラメータとしては、勾配、勾配の2乗それぞれの指数移動平均を制御するパラメータとしてbeta_1,beta_2が新たに指定可能です。
     - デフォルトのパラメータが推奨
+    - args
+      - lr
+      - beta_1
+      - beta_2
+      - epsilon
+      - decay
 - .regularizers
-  - .l2
+  - .l2(λ)
     - L2正則化を使用
-  - .l1
+  - .l1(λ)
     - L1正則化を使用
-  - .l1_l2
+  - .l1_l2(l1=λ, l2=λ)
     - ElasticNet
 - .preprocessing
   - .image
@@ -184,6 +342,8 @@
       - height_shift_range:上下操作
       - horizontal_flip:左右反転
       - rotation_range:回転
+      - samplewise_center
+        - 
   - .text
     - .Tokenizer
       - 単語の数値化
@@ -196,13 +356,23 @@
       - メソッド
         - fit_on_texts(texts)：入力＝学習に使う文章のリスト、出力＝なし
         - texts_to_sequences(texts)：入力＝数値化する文章のリスト、出力＝数値化された文章のリスト
-
 - .applications
   - 構築済みのモデルを読み込み
+  - vgg16
+    - VGG16
+      - ImageNetで事前学習した重みを利用可能なVGG16モデル．
 # tensorflow.python.keras
 - .utils
   - .vis_utils
     - モジュールは（graphvizを用いて）Kerasモデルの可視化するためのユーティリティ関数を提供します
     - model_to_dot
       - レイヤのモデル図を確認できる
-    - 
+
+# keras
+- .preprocessing
+  - .image
+    - .img_to_array
+      - 画像を配列に変換
+- .applications
+  - preprocess_input
+    - モデルによって画像の正規化、ImageNetデータセットのRGB各チャンネルごとの平均値を引く、などの処理が行われているようです。
