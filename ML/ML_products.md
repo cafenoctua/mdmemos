@@ -43,6 +43,27 @@ splunk
 [会社の機械学習の準備を整える方法](https://hbr.org/2016/11/how-to-make-your-company-machine-learning-ready)
 - 機械学習導入のフローがうまくまとまっている
 
+[自動video生成](https://www.wibbitz.com)
+
+[広告最適化](https://www.adext.ai/enterprise/)
+
+[コールセンターサポート](https://www.cogitocorp.com/product/)
+
+[顧客プロファイリング](https://www.boxever.com/customer-data-platform/)
+- 顧客にパーソナライズされた広告を表示できる
+
+[pandora](http://www.pandora.com/restricted)
+- 音楽レコメンド
+
+[スマートホーム](https://nest.com/)
+
+[画像認識プラットフォーム](https://www.clarifai.com/)
+
+[画像認識タイプ別](https://www.neurala.com/solutions#security)
+
 
 ## 参考にしたサイト
 - [capterra](https://www.capterra.com/machine-learning-software/)
+- [Forbes](https://www.forbes.com/sites/robertadams/2017/01/10/10-powerful-examples-of-artificial-intelligence-in-use-today/#2c4a63b1420d)
+- [built in](https://builtin.com/artificial-intelligence/ai-companies-roundup)
+- [Top45 AI company](https://www.datamation.com/artificial-intelligence/top-artificial-intelligence-companies.html)
